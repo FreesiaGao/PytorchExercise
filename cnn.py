@@ -49,6 +49,7 @@ if __name__ == '__main__':
         [transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
+    # 3 * 32 * 32 images
     trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                             download=False, transform=transform)
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,

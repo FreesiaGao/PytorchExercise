@@ -7,6 +7,7 @@ class MNISTConv(nn.Module):
 
     def __init__(self):
         super(MNISTConv, self).__init__()
+        # 1 * 28 * 28 size images
         self.conv1 = nn.Conv2d(1, 10, 5)
         self.pool1 = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(10, 20, 5)

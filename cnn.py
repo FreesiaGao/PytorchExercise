@@ -6,9 +6,9 @@ import torchvision
 import torchvision.transforms as transforms
 
 
-class Net(nn.Module):
+class CNN(nn.Module):
     def __init__(self):
-        super(Net, self).__init__()
+        super(CNN, self).__init__()
         # input channels, output channels, kernel
         self.conv1 = nn.Conv2d(3, 6, 5)
         self.conv2 = nn.Conv2d(6, 16, 5)
@@ -64,7 +64,7 @@ if __name__ == '__main__':
                'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
     # train
-    net = Net()
+    net = CNN()
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     # save and load
     save_param(net, 'model/CIFAR10_param.pkl')
 
-    net1 = Net()
+    net1 = CNN()
     load_param(net1, 'model/CIFAR10_param.pkl')
 
     # test

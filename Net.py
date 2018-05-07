@@ -28,6 +28,22 @@ class Net(nn.Module):
         return x
 
 
+def save_model(model, filename):
+    torch.save(model, filename)
+
+
+def save_param(model, filename):
+    torch.save(model.state_dict(), filename)
+
+
+def load_model(filename):
+    return torch.load(filename)
+
+
+def load_param(model, filename):
+    model.load_state_dict(torch.load(filename))
+
+
 if __name__ == '__main__':
     transform = transforms.Compose(
         [transforms.ToTensor(),
@@ -46,6 +62,7 @@ if __name__ == '__main__':
     classes = ('plane', 'car', 'bird', 'cat',
                'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
+    # train
     net = Net()
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
@@ -73,4 +90,36 @@ if __name__ == '__main__':
                 running_loss = 0.0
 
     print('Finished Training')
+
+    # save and load
+    save_param(net, 'model/CIFAR10_param.pkl')
+
+    net1 = Net()
+    load_param(net1, 'model/CIFAR10_param.pkl')
+
+    # test
+    correct = 0
+    total = 0
+    class_correct = list(0. for i in range(10))
+    class_total = list(0. for i in range(10))
+    with torch.no_grad():
+        for data in testloader:
+            images, labels = data
+            outputs = net1(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+            c = (predicted == labels).squeeze()
+            for i in range(4):
+                label = labels[i]
+                class_correct[label] += c[i].item()
+                class_total[label] += 1
+
+    print('Accuracy of the network on the 10000 test images: %d %%' % (
+        100 * correct / total))
+
+    for i in range(10):
+        print('Accuracy of %5s : %2d %%' % (
+            classes[i], 100 * class_correct[i] / class_total[i]))
+
 
